@@ -1,4 +1,4 @@
-#summary Doxygen How To
+#summary Commenting How To
 
 *Kérek mindenkit, aki kódot ír, a következőket vegye figyelembe a kommentezéskor:*
 
@@ -44,4 +44,3 @@
 - Attribútumokra is megtehetjük ezt, ha szükségesnek érezzük
 
 - Ismert hibák, figyelmeztetések, tennivalók
-
