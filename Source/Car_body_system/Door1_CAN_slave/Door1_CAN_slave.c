@@ -1,3 +1,11 @@
+/** \file Door1_CAN_slave.c
+* \brief Ajto vezerlo (ablakemelo, kozponti zar)
+* \author Software Developer Team
+* \version 1.0
+* \date 2009-12-06
+*/
+
+
 //$WCDATE$
 //$WCREV$
 // ver: 1.0 (nem találtam a megfelelõ kulcsszót, hogy automatikusan töltse ki a verziószámot)
@@ -15,6 +23,12 @@ U8 active, openclose;
 ** Description :	The main C function.  Program execution starts here.
 **
 ** ------------------------------------------------------------------------------
+*/
+
+/** \fn int main (void)
+*   \brief 
+*   \param nothing
+*	\return nothing
 */
 int main (void) {
   // Initialize
