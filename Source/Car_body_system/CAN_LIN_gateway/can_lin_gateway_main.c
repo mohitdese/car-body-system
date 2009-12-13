@@ -1,3 +1,10 @@
+/** \file CAN_LIN_gateway_main.c
++	* \brief CAN-LIN gateway (slave at CAN bus, master at LIN bus)
++	* \author Software Developer Team
++	* \version 1.0
++	* \date 2009-12-06
++	*/
+
 /*
 **
 ****************************************************************************
@@ -7,9 +14,9 @@
 **             Copyright (c) 2003, 2004 - Atmel Corporation
 **             Proprietary Information
 **
-** Project    	: AVR CAN SLAVE - LIN MASTER
-** Module     	: main.C
-** Description	: main application
+** Project      : AVR CAN SLAVE - LIN MASTER
+** Module       : main.C
+** Description  : main application
 **                Compatible with LIN Specifications 1.3
 **
 **
@@ -23,7 +30,7 @@
 **
 **
 **
-** can_lin_gateway kettõs funkciójú:
+** can_lin_gateway kettos funkciójú:
 **  1. CAN buszon slave modul
 **  2. LIN buszon master modul
 ****************************************************************************
@@ -50,10 +57,15 @@ U8 active;
 
 /* ************************************************************************** */
 /*
-** Description :	The main C function.  Program execution starts here.
+** Description :        The main C function.  Program execution starts here.
 **
 ** ------------------------------------------------------------------------------
 */
+/** \fn int main (void)
++	*   \brief main function
++	*   \param nothing
++	*	\return nothing
++	*/
 int main (void) {
   t_frame MESS_SET_SLAVE;
   t_frame MESS_SET_SLAVE2;
@@ -86,7 +98,7 @@ int main (void) {
   // Initialise LIN Controller
   lin_init();// Performs Initialisation of LIN Software Driver
 
-  sei(); 		/* Interrupts globally enabled */
+  sei();                /* Interrupts globally enabled */
 
   // CAN interface Init
   mcp2515_init();
@@ -96,43 +108,39 @@ int main (void) {
 
   while(1) {
     // CAN message receive
-	can_receive_message(&p_message);
-	
-	// A kormányról érkezett üzenet a CAN buszon?
-	if(p_message.id == 0x100){	
-		switch (p_message.data[4]) {
-			// bal elsõ ajtó -> nem ez a modul kezeli
-			case (1): {active = 0; DPY_TRM_S01__LED_2_OFF(); DPY_TRM_S01__LED_1_OFF();break;}
-			// jobb elsõ ajtó -> nem ez a modul kezeli
-			case (2): {active = 0; DPY_TRM_S01__LED_2_OFF(); DPY_TRM_S01__LED_1_OFF();break;}
-			// bal hátsó ajtó aktív -> üzenetet majd tovább kell küldeni LIN buszon
-			case (4): {active = 1; DPY_TRM_S01__LED_1_ON(); DPY_TRM_S01__LED_2_OFF(); break;}
-			// jobb hátsó ajtó aktív -> üzenetet majd tovább kell küldeni LIN buszon
-			case (8): {active = 2; DPY_TRM_S01__LED_2_ON(); DPY_TRM_S01__LED_1_OFF(); break;}	
-		} // end case
+        can_receive_message(&p_message);
+        
+        // A kormányról érkezett üzenet a CAN buszon?
+        if(p_message.id == 0x100){      
+                switch (p_message.data[4]) {
+                        // bal elso ajtó -> nem ez a modul kezeli
+                        case (1): {active = 0; DPY_TRM_S01__LED_2_OFF(); DPY_TRM_S01__LED_1_OFF();break;}
+                        // jobb elso ajtó -> nem ez a modul kezeli
+                        case (2): {active = 0; DPY_TRM_S01__LED_2_OFF(); DPY_TRM_S01__LED_1_OFF();break;}
+                        // bal hátsó ajtó aktív -> üzenetet majd tovább kell küldeni LIN buszon
+                        case (4): {active = 1; DPY_TRM_S01__LED_1_ON(); DPY_TRM_S01__LED_2_OFF(); break;}
+                        // jobb hátsó ajtó aktív -> üzenetet majd tovább kell küldeni LIN buszon
+                        case (8): {active = 2; DPY_TRM_S01__LED_2_ON(); DPY_TRM_S01__LED_1_OFF(); break;}       
+                } // end case
 
-		// LIN_SLAVE-nek továbbküldjük az adatot, ha õt szólítottuk meg
-		if(active == 1) {
-			Buf_SET_SLAVE[0] = p_message.data[4];
-			dpy_trm_s01__7seq_write_number(Buf_SET_SLAVE[0],0);
-		}
+                // LIN_SLAVE-nek továbbküldjük az adatot, ha ot szólítottuk meg
+                if(active == 1) {
+                        Buf_SET_SLAVE[0] = p_message.data[4];
+                        dpy_trm_s01__7seq_write_number(Buf_SET_SLAVE[0],0);
+                }
 
-		// LIN_SLAVE2-nek továbbküldjük az adatot, ha õt szólítottuk meg
-		else if(active == 2) {
-			Buf_SET_SLAVE2[0] = p_message.data[4];
-			dpy_trm_s01__7seq_write_number(Buf_SET_SLAVE2[0],0);
-		} //if active end
+                // LIN_SLAVE2-nek továbbküldjük az adatot, ha ot szólítottuk meg
+                else if(active == 2) {
+                        Buf_SET_SLAVE2[0] = p_message.data[4];
+                        dpy_trm_s01__7seq_write_number(Buf_SET_SLAVE2[0],0);
+                } //if active end
 
 
-	} //if p_message.id end
-	_delay_ms(10);
+        } //if p_message.id end
+        _delay_ms(10);
 
   }//while(1) end
   
   return 0;
 
 }//main end
-
-
-
-
