@@ -1,7 +1,7 @@
 /** \file CAN_LIN_gateway_main.c
 +	* \brief CAN-LIN gateway (slave at CAN bus, master at LIN bus)
 +	* \author Software Developer Team
-+	* \version 1.0
++	* \version 2.0
 +	* \date 2009-12-06
 +	*/
 
