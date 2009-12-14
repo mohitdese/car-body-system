@@ -1,5 +1,5 @@
 /** \file Door1_CAN_slave.c
-* \brief Ajto vezerlo (ablakemelo, kozponti zar)
+* \brief Controller of doors connected to CAN bus
 * \author Software Developer Team
 * \version 1.0
 * \date 2009-12-06
@@ -26,7 +26,7 @@ U8 active, openclose;
 */
 
 /** \fn int main (void)
-*   \brief 
+*   \brief main function
 *   \param nothing
 *	\return nothing
 */
