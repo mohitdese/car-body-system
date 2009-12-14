@@ -1,9 +1,16 @@
+/** \file Door2_LIN_slave.c
+* \brief Controller of doors connected to LIN bus
+* \author Software Developer Team
+* \version 1.0
+* \date 2009-12-11
+*/
+
 /*
 ****************************************************************************
 ** car-body-system project/LIN-es ablakvezérlõk
 **
 ** Verzió :     Dátum:         Szerzõ:      Comment:
-**    1.0       11.11.2009    B.L.          
+**    1.0       11.11.2009    B.L.          P.B.
 ****************************************************************************
 */
 
@@ -45,6 +52,11 @@ t_frame MESS_SET_SLAVE;
 U8 edge;
 U8 lock = 0x00;
 
+/** \fn int main (void)
+*   \brief main function
+*   \param nothing
+*	\return nothing
+*/ 
 
 int main (void) {
   
