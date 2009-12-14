@@ -25,18 +25,25 @@
 #include "mcu_avr_atmega128_api.h"
 #include "dpy_trm_s01.h"
 
-// Két Slave van, melyeknek különbözõ az elérési címe, így kétféleképpen fordítható a kód
+U8 ID;
 
 //#define SLAVE1
 #define SLAVE2
 
-
-// Elsõ Slave
+// Két Slave van, melyeknek különbözõ az elérési címe, így kétféleképpen fordítható a kód
 
 #ifdef SLAVE1
+  ID = 0x00;
+#endif
+#ifdef SLAVE2
+  ID = 0x01;
+#endif
+
 
 U8 Buf_SET_SLAVE [4];
 t_frame MESS_SET_SLAVE;
+U8 edge;
+U8 lock = 0x00;
 
 
 int main (void) {
@@ -44,7 +51,7 @@ int main (void) {
   U8 number_of_frame ;
 
   //Slave frame inicializálása
-  MESS_SET_SLAVE.frame_id    = 0x00 ;
+  MESS_SET_SLAVE.frame_id    = ID;
   MESS_SET_SLAVE.frame_size  = 4 ;
   MESS_SET_SLAVE.frame_type  = STANDART_LIN_FRAME_TYPE ;
   MESS_SET_SLAVE.frame_data  = Buf_SET_SLAVE;
@@ -79,9 +86,15 @@ int main (void) {
 	 //Ha az üzenet 5. bitje aktív, balra forgatunk
 	 if (Buf_SET_SLAVE[0] == 32) DPY_TRM_S01__LED_2_ON();
 	 	else DPY_TRM_S01__LED_2_OFF();
-	 	
-	 //a az üzenet 6. bitje aktív, beállítjuk a központi zárat
-	 if (Buf_SET_SLAVE[0] == 64) DPY_TRM_S01__LED_4_ON();
+	 
+	 //A központi zár akkor vált státuszt, ha egy felfutó élet érzékelünk
+	 //az üzenet 6. bitjén. Az élérzékelést az edge változóban tároljuk,
+	 //a zár státuszát a lock változóban (és ezt jelzi a LED 4 állapota is)
+	 
+	 edge = (edge & 0x01) << 1 + ((Buf_SET_SLAVE[0]) & 0x40) >> 6;
+	 if ((edge & 0x03) == 1) lock = ~lock;
+	 
+	 if (lock != 0x00) DPY_TRM_S01__LED_4_ON();
 	 	else DPY_TRM_S01__LED_4_OFF();  
 	 	
 	 //A vett LIN-es üzenet kijelzése a hétszegmenses kijelzõn  
@@ -91,59 +104,6 @@ int main (void) {
   
   return 0;
 }
-
-
-#endif
-
-
-
-
-#ifdef SLAVE2
-
-U8 Buf_SET_SLAVE2 [4];
-t_frame MESS_SET_SLAVE2;
-
-int main (void) {
-  
-  U8 number_of_frame ;
-
-  
-  MESS_SET_SLAVE2.frame_id    = 0x01 ;
-  MESS_SET_SLAVE2.frame_size  = 4 ;
-  MESS_SET_SLAVE2.frame_type  = STANDART_LIN_FRAME_TYPE ;
-  MESS_SET_SLAVE2.frame_data  = Buf_SET_SLAVE2;
-
-  number_of_frame = 1;
-  my_schedule.frame_message[0] = MESS_SET_SLAVE2;
-  my_schedule.number_of_frame = number_of_frame;
-
-  dpy_trm_s01__Init();
-  
-  lin_init();
-
-  sei(); 	
-  Buf_SET_SLAVE2[0]=0;
-
-  while(1) {
-     
-	dpy_trm_s01__7seq_write_number(Buf_SET_SLAVE2[0],0);
-
-	DPY_TRM_S01__LED_3_ON();
-
-	 if (Buf_SET_SLAVE2[0] == 16) DPY_TRM_S01__LED_1_ON(); 
-	 	else DPY_TRM_S01__LED_1_OFF();
-	 if (Buf_SET_SLAVE2[0] == 32) DPY_TRM_S01__LED_2_ON();
-	 	else DPY_TRM_S01__LED_2_OFF();
-	 if (Buf_SET_SLAVE2[0] == 64) DPY_TRM_S01__LED_4_ON();
-	 	else DPY_TRM_S01__LED_4_OFF();  
-			 
-  }
-  
-  return 0;
-}
-
-
-#endif
 
 
 
