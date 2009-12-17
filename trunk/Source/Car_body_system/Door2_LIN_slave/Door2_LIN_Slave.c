@@ -1,8 +1,21 @@
 /** \file Door2_LIN_slave.c
-* \brief Controller of doors connected to LIN bus
+* \brief Door controller (LIN slave)
 * \author Software Developer Team
 * \version 1.0
-* \date 2009-12-11
+* \date 2009-12-16
+* \details This file contains the controller of doors connected to LIN bus
+* 		- Initialization
+*			- Slave frame initialization
+*			- Display initialization
+*			- LIN controller initialization
+*		- Process loop
+*			- Enable engine
+*			- Handling engine controlled by LIN messages
+*			- Handling central lock system
+*			- Displaying recieved LIN message
+*			- 10 ms delay
+*
+* \todo Rewriting the code using functions. The main function should contain only the main logics
 */
 
 /*
@@ -10,7 +23,7 @@
 ** car-body-system project/LIN-es ablakvezérlõk
 **
 ** Verzió :     Dátum:         Szerzõ:      Comment:
-**    1.0       11.11.2009    B.L.          P.B.
+**    1.0       11.11.2009    B.L.          P.B. + K.B.
 ****************************************************************************
 */
 
@@ -52,11 +65,13 @@ t_frame MESS_SET_SLAVE;
 U8 edge;
 U8 lock = 0x00;
 
-/** \fn int main (void)
-*   \brief main function
-*   \param nothing
-*	\return nothing
-*/ 
+/**
+* \brief Main function
+* \details This function is the only user defined function in this file. Program execution starts here.
+* \param main function doesn't have any parameter
+* \return The function returns 0 if executed
+* \warning Variables are not included in documentation!
+*/
 
 int main (void) {
   

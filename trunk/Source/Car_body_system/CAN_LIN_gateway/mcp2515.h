@@ -314,13 +314,16 @@
 #define R_CNF3_500kbps	(1<<PHSEG21)
 
 
+/**\brief CAN message type
+ */
 typedef struct
 {
-    unsigned short int  	id;
-    unsigned char   		rtr;
-    unsigned char   		length;
-    unsigned char   		data[8];
+    unsigned short int  	id; //!< ID field
+    unsigned char   		rtr; //!< RTR field
+    unsigned char   		length; //!< length of message
+    unsigned char   		data[8]; //!< mesage payload
 } CAN_message;
+
 
 
 // FUNCTIONS

@@ -1,10 +1,28 @@
 /** \file Door1_CAN_slave.c
-* \brief Controller of doors connected to CAN bus
+* \brief Door controller (CAN slave)
 * \author Software Developer Team
 * \version 1.0
-* \date 2009-12-06
+* \date 2009-12-16
+*
+* \details This file contains the door controller connected to CAN bus.
+* 		It handles the door's window and the central lock system.
+*		- Initialize
+*			- Interrupts globally enabled
+*			- CAN initialization
+*  			- Display card initialization
+*			- Sent message ID = 0x100
+*		- Process loop
+*			- Raise window (button on the door)
+*			- Lower window (button on the door)
+*			- Central lock system CAN message to other doors
+*			- Receiving CAN message from steering wheel
+*			- Handle CAN message
+*				- Enable/disable engine
+*				- Raise/lower window
+*			- 10 ms delay
+*
+* \todo Rewriting the code using functions. The main function should contain only the main logics
 */
-
 
 //$WCDATE$
 //$WCREV$
@@ -16,8 +34,27 @@
 #include "mcp2515.h"
 #include "mcu_avr_atmega128_api.h"
 
-CAN_message received,sent;
-U8 active, openclose;
+/**\brief Received CAN message
+ */
+CAN_message received;
+
+/**\brief CAN message to send
+ */
+CAN_message sent;
+
+/**\brief State of engine
+ * \details 0 = Engine inactive
+ * \details 1 = Engine active
+ */
+U8 active;
+
+/**\brief State of central lock system
+ * \details 0 = Locks opened
+ * \details 1 = Locks closed
+ * \warning Is this true?
+ */
+U8 openclose;
+
 /* ************************************************************************** */
 /*
 ** Description :	The main C function.  Program execution starts here.
@@ -25,11 +62,13 @@ U8 active, openclose;
 ** ------------------------------------------------------------------------------
 */
 
-/** \fn int main (void)
-*   \brief main function
-*   \param nothing
-*	\return nothing
-*/
+/**
+ * \brief Main function
+ * \details This function is the only user defined function in this file. Program execution starts here.
+ * \param main function doesn't have any parameter
+ * \return The function returns 0 if executed
+ */
+
 int main (void) {
   // Initialize
   sei(); 		/* Interrupts globally enabled */
