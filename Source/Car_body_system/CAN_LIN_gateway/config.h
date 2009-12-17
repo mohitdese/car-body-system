@@ -73,6 +73,9 @@
 
 #ifndef U8_TYPE_DEF
 #define U8_TYPE_DEF
+
+/**\brief 8-bit unsigned data type
+ */
 typedef unsigned char U8;
 #endif
 

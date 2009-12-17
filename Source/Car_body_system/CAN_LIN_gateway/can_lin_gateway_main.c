@@ -1,9 +1,25 @@
-/** \file CAN_LIN_gateway_main.c
-+	* \brief CAN-LIN gateway (slave at CAN bus, master at LIN bus)
-+	* \author Software Developer Team
-+	* \version 2.0
-+	* \date 2009-12-06
-+	*/
+ /** \file CAN_LIN_gateway_main.c
+* \brief CAN-LIN gateway
+* \author Software Developer Team
+* \version 2.0
+* \date 2009-12-16
+* \details This file contains the CAN-LIN gateway which is a slave at CAN bus, and a master at LIN bus
+*		- Initialization
+*			- Set Slave Frame 0x00
+*			- Set Slave Frame 0x01
+*			- Set Frame parameters
+*			- IO ports configuration
+*			- LIN controller initialization
+*			- CAN interface initialization
+*			- Display initialization
+*		- Process loop
+*			- Receiving CAN message
+*			- Handling CAN message
+*			- Forwarding message to corresponding LIN slave
+*			- 10 ms delay
+*
+* \todo Rewriting the code using functions. The main function should contain only the main logics
+*/
 
 /*
 **
@@ -61,11 +77,15 @@ U8 active;
 **
 ** ------------------------------------------------------------------------------
 */
-/** \fn int main (void)
-+	*   \brief main function
-+	*   \param nothing
-+	*	\return nothing
-+	*/
+
+/**
+* \brief Main function
+* \details This function is the only user defined function in this file. Program execution starts here.
+* \param main function doesn't have any parameter
+* \return The function returns 0 if executed
+* \warning Variables are not included in documentation!
+*/
+
 int main (void) {
   t_frame MESS_SET_SLAVE;
   t_frame MESS_SET_SLAVE2;

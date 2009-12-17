@@ -69,10 +69,13 @@
 #define LIN_BAUDRATE 19200
 #define BAUDRATE LIN_BAUDRATE
 //#define LIN_BAUDRATE 2400
-#define LIN_CONFIG    1 //1:slave 0:master
+#define LIN_CONFIG    0 //1:slave 0:master
 
 #ifndef U8_TYPE_DEF
 #define U8_TYPE_DEF
+
+/**\brief 8-bit unsigned data type
+ */
 typedef unsigned char U8;
 #endif
 
